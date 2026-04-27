@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<form action="/api/auth/login" method="post">
+  <h2>登录</h2>
+  用户名：<input name="username" value="admin"><br><br>
+  密码：<input name="password" type="password" value="123456"><br><br>
+  <button type="submit">登录</button>
+</form>
+
+<script>
+// 登录成功后自动保存token
+document.querySelector("form").onsubmit = async function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const res = await fetch("/api/auth/login", {
+    method: "POST",
+    body: formData
+  });
+  const data = await res.json();
+  if (data.code === 200) {
+    localStorage.setItem("token", data.token);
+    alert("登录成功！token已保存");
+    window.location.href = "/test_scan";
+  } else {
+    alert("登录失败：" + data.msg);
+  }
+}
+</script>
