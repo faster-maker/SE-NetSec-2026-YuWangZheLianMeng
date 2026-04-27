@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<h2>扫描历史记录</h2>
+<button onclick="loadHistory()">刷新历史记录</button>
+<div id="result"></div>
+
+<script>
+async function loadHistory() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("请先登录！");
+    window.location.href = "/test_login";
+    return;
+  }
+
+  const res = await fetch("/api/scan/history", {
+    method: "GET",
+    headers: {
+      "token": token
+    }
+  });
+
+  const data = await res.json();
+  document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+}
+</script>

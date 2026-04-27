@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<h2>上传Python文件扫描</h2>
+<input type="file" id="fileInput" accept=".py"><br><br>
+<button onclick="upload()">开始扫描</button>
+<div id="result"></div>
+
+<script>
+async function upload() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("请先登录！");
+    window.location.href = "/test_login";
+    return;
+  }
+
+  const file = document.getElementById("fileInput").files[0];
+  if (!file) {
+    alert("请选择文件");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch("/api/scan/upload", {
+    method: "POST",
+    headers: {
+      "token": token
+    },
+    body: formData
+  });
+
+  const data = await res.json();
+  document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+}
+</script>
